@@ -78,6 +78,26 @@ Ce script effectue des opérations destructives sur le périphérique cible (qu'
 - Option pour créer plusieurs partitions avec des configurations différentes
 - Chiffrement de partitions existantes sans perte de données
 - Interface graphique pour une utilisation plus conviviale
+- 
+## ⚖️ Clause de responsabilité
+
+Ce script est fourni "tel quel", à des fins pédagogiques et professionnelles.
+
+Il utilise exclusivement des outils open source standards (cryptsetup, parted) disponibles sous Linux.  
+L’auteur ne pourra être tenu responsable de toute perte de données, mauvaise utilisation ou dommage consécutif à l’exécution de ce script.
+
+L’utilisateur est seul responsable :
+- de la sauvegarde préalable de ses données,
+- de la sélection du disque cible,
+- de la gestion et de la conservation des clés de chiffrement générées.
+
+Ce script n’implémente aucun mécanisme de récupération.  
+Toute perte de la clé entraîne la perte définitive des données.
+
+Ce projet respecte la législation française relative à l’utilisation de la cryptologie (LCEN – art. L.871-7 et R.871-12).  
+Aucun service de chiffrement à des tiers n’est fourni.
+
+Utilisation à vos risques et périls.
 
 ## 📞 Contact
 
