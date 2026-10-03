@@ -44,7 +44,6 @@ Avant usage en production, relisez le script et adaptez les chemins, politiques 
 ## Documentation
 
 - [Analyse technique](docs/analysis.md)
-- [À propos de l'auteur](docs/author.md)
 
 ## Version
 
