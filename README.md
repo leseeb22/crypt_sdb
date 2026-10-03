@@ -1,111 +1,58 @@
-# 🔐 Script de Sécurisation de Disque (Interne ou Externe)
+# crypt_sdb
 
-## Développé par [Sébastien VIDOTTO](https://heteractis.fr)
-**Architecte numérique & Stratège digital** – Fondateur de l'agence [Heteractis](https://heteractis.fr)
+Script Bash de préparation d'un disque chiffré sous Linux avec **LUKS**.
 
-## 📋 Versionnage
+> **Attention : ce script peut effacer intégralement le disque sélectionné.** Vérifiez toujours le périphérique cible et disposez d'une sauvegarde avant exécution.
 
-| Version | Date | Description |
-|---------|------|-------------|
-| 1.0.0 | 25/05/2023 | Version initiale du script |
+## Ce que fait le script
 
-## 📋 Présentation
+- sélection et contrôle du périphérique cible ;
+- détection des partitions existantes et confirmation avant destruction ;
+- test optionnel du disque ;
+- création d'une partition GPT ;
+- chiffrement LUKS avec fichier de clé ;
+- choix du système de fichiers : ext4, XFS ou Btrfs ;
+- montage et configuration de `crypttab` / `fstab` ;
+- journalisation des opérations.
 
-Ce script `crypt_sdb.sh` est un utilitaire avancé de sécurisation de disque sous Linux. Il permet de transformer n'importe quel disque (interne ou externe) en un support de stockage hautement sécurisé grâce au chiffrement LUKS, tout en automatisant l'ensemble du processus de configuration.
+## Prérequis
 
-## 🚀 Fonctionnalités principales
-
-1. **Paramétrage flexible du périphérique cible**
-   - Spécification en argument ou sélection interactive
-   - Affichage des disques disponibles pour faciliter le choix
-   - Vérification de l'existence du périphérique avant manipulation
-
-2. **Sécurité renforcée**
-   - Vérification préalable de l'existence de données sur le disque
-   - Demande de confirmation explicite avant toute opération destructive
-   - Test d'intégrité physique du disque (optionnel via badblocks)
-   - Chiffrement LUKS avec génération de clé aléatoire sécurisée
-   - Permissions restrictives sur les fichiers sensibles
-
-3. **Flexibilité de configuration**
-   - Choix entre différents systèmes de fichiers (ext4, xfs, btrfs)
-   - Option de sauvegarde de la clé de chiffrement
-   - Taille de clé configurable
-
-4. **Automatisation complète**
-   - Configuration du montage automatique au démarrage via crypttab et fstab
-   - Journalisation détaillée de toutes les opérations
-   - Gestion robuste des erreurs avec arrêt immédiat en cas de problème
-
-## 💼 Avantages et bénéfices
-
-### Pour les entreprises et professionnels
-
-- **Protection des données sensibles** : Empêche tout accès non autorisé aux informations confidentielles en cas de perte, de vol du disque ou d'accès non autorisé au système
-- **Conformité RGPD** : Contribue au respect des obligations légales concernant la protection des données personnelles
-- **Simplicité d'utilisation** : Automatisation complète du processus, ne nécessitant pas d'expertise technique approfondie
-- **Fiabilité** : Vérifications multiples et gestion des erreurs pour éviter toute perte de données
-
-### Pour les utilisateurs individuels
-
-- **Sécurité de vos données personnelles** : Photos, documents administratifs, sauvegardes protégées contre les accès non autorisés
-- **Tranquillité d'esprit** : En cas de perte, de vol ou d'accès non autorisé, vos données restent inaccessibles sans la clé de déchiffrement
-- **Solution professionnelle** : Bénéficiez d'une solution de sécurité de niveau entreprise pour vos besoins personnels
-
-## 🔧 Prérequis techniques
-
-- Système Linux (testé sur Debian/Ubuntu)
-- Droits administrateur (root)
-- Packages requis : cryptsetup, parted, util-linux
-
-## 📚 Utilisation
+Linux, droits root et les outils standards utilisés par le script, notamment :
 
 ```bash
-# Utilisation avec périphérique par défaut (/dev/sdb)
-sudo ./crypt_sdb.sh
+cryptsetup parted util-linux
+```
 
-# Utilisation avec périphérique spécifique
+## Utilisation
+
+```bash
+sudo ./crypt_sdb.sh
+```
+
+ou avec un périphérique explicite :
+
+```bash
 sudo ./crypt_sdb.sh /dev/sdX
 ```
 
-## ⚠️ Avertissement
+## Sécurité
 
-Ce script effectue des opérations destructives sur le périphérique cible (qu'il s'agisse d'un disque interne ou externe). Toutes les données existantes seront effacées. Assurez-vous de sauvegarder vos données importantes avant utilisation.
+Le script génère et manipule une clé de chiffrement. La perte de cette clé peut rendre les données irrécupérables. Stockez toute sauvegarde de clé hors du disque chiffré et protégez-la avec des permissions adaptées.
 
-## 🔄 Améliorations futures envisagées
+Avant usage en production, relisez le script et adaptez les chemins, politiques de sauvegarde et options LUKS à votre contexte.
 
-- Support pour les mots de passe en plus des fichiers de clé
-- Option pour créer plusieurs partitions avec des configurations différentes
-- Chiffrement de partitions existantes sans perte de données
-- Interface graphique pour une utilisation plus conviviale
-- 
-## ⚖️ Clause de responsabilité
+## Documentation
 
-Ce script est fourni "tel quel", à des fins pédagogiques et professionnelles.
+- [Analyse technique](docs/analysis.md)
 
-Il utilise exclusivement des outils open source standards (cryptsetup, parted) disponibles sous Linux.  
-L’auteur ne pourra être tenu responsable de toute perte de données, mauvaise utilisation ou dommage consécutif à l’exécution de ce script.
+## Version
 
-L’utilisateur est seul responsable :
-- de la sauvegarde préalable de ses données,
-- de la sélection du disque cible,
-- de la gestion et de la conservation des clés de chiffrement générées.
+Version documentée : **1.0.0**.
 
-Ce script n’implémente aucun mécanisme de récupération.  
-Toute perte de la clé entraîne la perte définitive des données.
+## Auteur
 
-Ce projet respecte la législation française relative à l’utilisation de la cryptologie (LCEN – art. L.871-7 et R.871-12).  
-Aucun service de chiffrement à des tiers n’est fourni.
+Sébastien Vidotto — Heteractis.
 
-Utilisation à vos risques et périls.
+## Licence
 
-## 📞 Contact
-
-Pour toute question ou suggestion d'amélioration, n'hésitez pas à me contacter :
-
-- 📧 Email : leseeb22@gmail.com
-- 🌐 Site web : [heteractis.fr](https://heteractis.fr)
-
----
-
-*Développé avec ❤️ par Sébastien VIDOTTO, expert en solutions numériques sécurisées et stratégie digitale depuis plus de 18 ans.*
+Voir [LICENCE](LICENCE).
